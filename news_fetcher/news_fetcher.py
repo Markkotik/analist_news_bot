@@ -6,6 +6,10 @@ from config import CRYPTOPANIC_AUTH_TOKEN
 
 
 class NewsFetcher:
+    def get_latest_news(self):
+        news = self.get_news_from_cryptopanic()
+        return news
+
     def get_news_from_twitter(self):
         # Здесь должен быть код для получения новостей из Twitter
         pass
