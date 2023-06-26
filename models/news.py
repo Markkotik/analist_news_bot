@@ -1,5 +1,12 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import List, Optional
+
+
+class Interpretation(Enum):
+    BUY = 'BUY'
+    SELL = 'SELL'
+    HOLD = 'HOLD'
 
 
 @dataclass
@@ -12,4 +19,5 @@ class News:
     text: Optional[str] = None
     currencies: Optional[List[str]] = None
     hashtags: Optional[List[str]] = None
-    is_short: Optional[bool] = None
+    interpretation: Optional[Interpretation] = None
+    reason: Optional[str] = None

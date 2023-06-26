@@ -17,7 +17,7 @@ class BotController:
         return analysis
 
     def decide_and_trade(self, analysis):
-        if analysis < 0:
+        if analysis.is_short:
             trade = self.binance_trader.open_short_trade("BTC")
             self.db_handler.save_trade(trade)
 
