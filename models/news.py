@@ -21,3 +21,4 @@ class News:
     hashtags: Optional[List[str]] = None
     interpretation: Optional[Interpretation] = None
     reason: Optional[str] = None
+    trade_executed: Optional[bool] = None
