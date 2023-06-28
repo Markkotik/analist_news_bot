@@ -1,18 +1,17 @@
+import json
 import sqlite3
-from models.news import News
-# from models.signal import Signal
-# from models.trade import Trade
+from typing import List
+
+from models.news import News, Interpretation
 
 
 class DatabaseHandler:
-    def __init__(self, db_name):
-        self.connection = sqlite3.connect(db_name)
-        self.cursor = self.connection.cursor()
-        self.create_tables()
+    def __init__(self, db_name: str = ':memory:'):
+        self.conn = sqlite3.connect(db_name)
+        self.cursor = self.conn.cursor()
 
-    def create_tables(self):
         self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS News (
+            CREATE TABLE IF NOT EXISTS news (
                 url TEXT,
                 date TEXT,
                 website TEXT,
@@ -21,49 +20,56 @@ class DatabaseHandler:
                 text TEXT,
                 currencies TEXT,
                 hashtags TEXT,
-                is_short INTEGER
+                interpretation TEXT,
+                reason TEXT,
+                trade_executed BOOLEAN
             )
         """)
-        # self.cursor.execute("""
-        #     CREATE TABLE IF NOT EXISTS Signals (
-        #         signal_id INTEGER PRIMARY KEY,
-        #         signal_type TEXT,
-        #         signal_time TEXT,
-        #         related_news_url TEXT
-        #     )
-        # """)
-        # self.cursor.execute("""
-        #     CREATE TABLE IF NOT EXISTS Trades (
-        #         trade_id INTEGER PRIMARY KEY,
-        #         trade_type TEXT,
-        #         trade_time TEXT,
-        #         trade_volume REAL,
-        #         related_signal_id INTEGER,
-        #         FOREIGN KEY(related_signal_id) REFERENCES Signals(signal_id)
-        #     )
-        # """)
-        self.connection.commit()
+
+    def save_news(self, news_list: List[News]):
+        for news in news_list:
+            self.insert_news(news)
 
     def insert_news(self, news: News):
         self.cursor.execute("""
-            INSERT INTO News (url, date, website, source, title, text, currencies, hashtags, is_short) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (news.url, news.date, news.website, news.source, news.title, news.text, str(news.currencies), str(news.hashtags), news.is_short))
-        self.connection.commit()
+            INSERT INTO news VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            news.url,
+            news.date,
+            news.website,
+            news.source,
+            news.title,
+            news.text,
+            json.dumps(news.currencies) if news.currencies is not None else None,
+            json.dumps(news.hashtags) if news.hashtags is not None else None,
+            news.interpretation.value if news.interpretation is not None else None,
+            news.reason,
+            news.trade_executed
+        ))
+        self.conn.commit()
 
-    # def insert_signal(self, signal: Signal):
-    #     self.cursor.execute("""
-    #         INSERT INTO Signals (signal_id, signal_type, signal_time, related_news_url)
-    #         VALUES (?, ?, ?, ?)
-    #     """, (signal.signal_id, signal.signal_type, signal.signal_time, signal.related_news_url))
-    #     self.connection.commit()
-    #
-    # def insert_trade(self, trade: Trade):
-    #     self.cursor.execute("""
-    #         INSERT INTO Trades (trade_id, trade_type, trade_time, trade_volume, related_signal_id)
-    #         VALUES (?, ?, ?, ?, ?)
-    #     """, (trade.trade_id, trade.trade_type, trade.trade_time, trade.trade_volume, trade.related_signal_id))
-    #     self.connection.commit()
+    def get_all_news(self):
+        self.cursor.execute("""
+            SELECT * FROM news
+        """)
+        rows = self.cursor.fetchall()
+        news_list = []
+        for row in rows:
+            news = News(
+                url=row[0],
+                date=row[1],
+                website=row[2],
+                source=row[3],
+                title=row[4],
+                text=row[5],
+                currencies=json.loads(row[6]) if row[6] is not None else None,
+                hashtags=json.loads(row[7]) if row[7] is not None else None,
+                interpretation=Interpretation(row[8]) if row[8] is not None else None,
+                reason=row[9],
+                trade_executed=row[10]
+            )
+            news_list.append(news)
+        return news_list
 
-    def close_connection(self):
-        self.connection.close()
+    def close(self):
+        self.conn.close()
