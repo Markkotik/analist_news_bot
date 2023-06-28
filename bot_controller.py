@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
+from binance_trader.binance_trader import BinanceTrader
 from database_handler.database_handler import DatabaseHandler
+from news_analyser.news_analyser import NewsAnalyser
 from news_fetcher.news_fetcher import NewsFetcher
 
 
