@@ -1,5 +1,5 @@
 from models.news import News
-from typing import List
+from typing import List, Optional
 import requests
 
 from config import CRYPTOPANIC_AUTH_TOKEN
@@ -15,9 +15,9 @@ class NewsFetcher:
         pass
 
     @staticmethod
-    def get_news_from_cryptopanic() -> List[News]:
+    def get_news_from_cryptopanic(page: Optional[int] = 1) -> List[News]:
         base_url = 'https://cryptopanic.com/api/v1/posts/'
-        params = {'auth_token': CRYPTOPANIC_AUTH_TOKEN}
+        params = {'auth_token': CRYPTOPANIC_AUTH_TOKEN, 'page': page}
 
         try:
             response = requests.get(base_url, params=params)
