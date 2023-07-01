@@ -25,7 +25,6 @@ class NewsAnalyser:
             prompt=input_text,
             max_tokens=60,
             temperature=0.1,
-            timeout=1
         )
 
         if response.choices:
