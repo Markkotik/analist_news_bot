@@ -12,7 +12,7 @@ class NewsAnalyser:
     def analyse_news(self, news_list: List[News]) -> List[News]:
         for news in news_list:
             interpretation, reason = self.get_interpretation_and_reason(news.title)
-            news.interpretation = Interpretation(interpretation)
+            news.interpretation = Interpretation(interpretation.upper())
             news.reason = reason
 
         return news_list

@@ -9,7 +9,7 @@ def main():
     news_fetcher = NewsFetcher()
     news_analyser = NewsAnalyser()
     binance_trader = BinanceTrader()
-    db_handler = DatabaseHandler()
+    db_handler = DatabaseHandler('news_analysis_bot.db')
 
     bot_controller = BotController(
         news_fetcher=news_fetcher,
