@@ -18,13 +18,14 @@ class BotController:
         analysis = self.news_analyser.analyse_news(news)
         return analysis
 
-    def decide_and_trade(self, analysis):
-        if analysis.interpretation == 'SELL':
-            # trades = self.binance_trader.open_short_trade(analysis.currencies)
+    def decide_and_trade(self, analysis_list):
+        for analysis in analysis_list:
+            if analysis.interpretation == 'SELL':
+                # trades = self.binance_trader.open_short_trade(analysis.currencies)
+                pass
             self.db_handler.save_news(analysis)
 
     def run(self):
         while True:
             analysis = self.fetch_and_analyse()
             self.decide_and_trade(analysis)
-
