@@ -9,7 +9,7 @@ from news_fetcher.news_fetcher import NewsFetcher
 class BotController:
     news_fetcher: NewsFetcher
     news_analyser: NewsAnalyser
-    db_handler: DatabaseHandler(db_name='backtest')
+    db_handler: DatabaseHandler(db_name='backtest.db')
 
     def fetch_and_analyse(self):
         news = self.news_fetcher.get_news_from_cryptopanic(page=10)
