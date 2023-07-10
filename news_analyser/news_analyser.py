@@ -28,6 +28,7 @@ class NewsAnalyser:
         )
 
         if response.choices:
-            return response.choices[0].text.strip().split('\n', 1)
+            interpretation, reason = response.choices[0].text.strip().split(':', 1)
+            return interpretation.strip(), reason.strip()
 
         return None, None
