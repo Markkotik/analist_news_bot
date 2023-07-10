@@ -6,13 +6,11 @@ from bot_controller import BotController
 
 
 def main():
-    # Инициализируйте все компоненты бота
     news_fetcher = NewsFetcher()
     news_analyser = NewsAnalyser()
     binance_trader = BinanceTrader()
     db_handler = DatabaseHandler()
 
-    # Создайте контроллер бота и передайте ему все компоненты
     bot_controller = BotController(
         news_fetcher=news_fetcher,
         news_analyser=news_analyser,
@@ -20,7 +18,6 @@ def main():
         db_handler=db_handler,
     )
 
-    # Запустите бота
     bot_controller.run()
 
 
