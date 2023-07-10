@@ -19,18 +19,21 @@ class NewsAnalyser:
 
     def get_interpretation_and_reason(self, title: str) -> Tuple[Optional[str], Optional[str]]:
         input_text = self.prompt + '\n' + title
-
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=input_text,
-            max_tokens=60,
-            temperature=0.1,
-        )
-
-        if response.choices:
-            interpretation, reason = response.choices[0].text.strip().split(':', 1)
-            interpretation = ''.join(char for char in interpretation if char.isalpha())
-
-            return interpretation, reason.strip()
-
-        return None, None
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo-0301",
+                messages=[
+                    {"role": "system", "content": input_text},
+                ],
+                max_tokens=60,
+                temperature=0.1,
+            )
+            if response['choices']:
+                interpretation, reason = response['choices'][0]['message']['content'].strip().split(':', 1)
+                interpretation = ''.join(char for char in interpretation if char.isalpha())
+                return interpretation, reason.strip()
+            else:
+                return None, None
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None, None

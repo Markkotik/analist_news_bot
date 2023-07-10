@@ -26,6 +26,6 @@ class BotController:
             self.db_handler.save_news(analysis)
 
     def run(self):
-        while True:
-            analysis = self.fetch_and_analyse()
-            self.decide_and_trade(analysis)
+        # while True:
+        analysis = self.fetch_and_analyse()
+        self.decide_and_trade(analysis)
