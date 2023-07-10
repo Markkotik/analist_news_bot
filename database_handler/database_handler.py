@@ -5,7 +5,7 @@ from typing import List, Optional
 from models.news import News, Interpretation
 
 # moved SQL related stuff to its own module.
-from sql import NEWS_TABLE_SQL, INSERT_NEWS_SQL, SELECT_ALL_NEWS_SQL
+from database_handler.sql import  NEWS_TABLE_SQL, INSERT_NEWS_SQL, SELECT_ALL_NEWS_SQL
 
 
 class DatabaseHandler:
@@ -15,9 +15,12 @@ class DatabaseHandler:
 
         self.cursor.execute(NEWS_TABLE_SQL)
 
-    def save_news(self, news_list: List[News]):
+    def save_news_list(self, news_list: List[News]):
         for news in news_list:
             self._insert_news(news)
+
+    def save_news(self, news: News):
+        self._insert_news(news)
 
     def _insert_news(self, news: News):
         self.cursor.execute(INSERT_NEWS_SQL, self._to_db_record(news))
