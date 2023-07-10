@@ -29,6 +29,8 @@ class NewsAnalyser:
 
         if response.choices:
             interpretation, reason = response.choices[0].text.strip().split(':', 1)
-            return interpretation.strip(), reason.strip()
+            interpretation = ''.join(char for char in interpretation if char.isalpha())
+
+            return interpretation, reason.strip()
 
         return None, None
