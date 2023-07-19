@@ -5,6 +5,7 @@ NEWS_TABLE_SQL = """
         website TEXT,
         source TEXT,
         title TEXT,
+        asset TEXT,
         text TEXT,
         currencies TEXT,
         hashtags TEXT,
@@ -15,7 +16,7 @@ NEWS_TABLE_SQL = """
 """
 
 INSERT_NEWS_SQL = """
-    INSERT INTO news VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO news VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 """
 
 SELECT_ALL_NEWS_SQL = """

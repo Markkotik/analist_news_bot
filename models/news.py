@@ -16,6 +16,7 @@ class News:
     website: str
     source: str
     title: str
+    asset: Optional[str] = None
     text: Optional[str] = None
     currencies: Optional[List[str]] = None
     hashtags: Optional[List[str]] = None
