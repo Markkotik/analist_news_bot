@@ -33,7 +33,6 @@ class DatabaseHandler:
     def close(self):
         self.conn.close()
 
-    # Refactoring: moved record to News and News to record conversion to their own methods.
     @staticmethod
     def _to_db_record(news: News) -> tuple:
         return (
@@ -42,6 +41,7 @@ class DatabaseHandler:
             news.website,
             news.source,
             news.title,
+            news.asset,
             news.text,
             DatabaseHandler._json_dumps(news.currencies),
             DatabaseHandler._json_dumps(news.hashtags),
@@ -58,12 +58,13 @@ class DatabaseHandler:
             website=record[2],
             source=record[3],
             title=record[4],
-            text=record[5],
-            currencies=DatabaseHandler._json_loads(record[6]),
-            hashtags=DatabaseHandler._json_loads(record[7]),
-            interpretation=Interpretation(record[8]) if record[8] is not None else None,
-            reason=record[9],
-            trade_executed=record[10]
+            asset=record[5],
+            text=record[6],
+            currencies=DatabaseHandler._json_loads(record[7]),
+            hashtags=DatabaseHandler._json_loads(record[8]),
+            interpretation=Interpretation(record[9]) if record[9] is not None else None,
+            reason=record[10],
+            trade_executed=record[11],
         )
 
     # Helper methods for cleaner code: handle json serialization/deserialization.
